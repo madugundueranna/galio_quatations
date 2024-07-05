@@ -8,16 +8,12 @@ include('functions/myfunctions.php');
 
 $error = array();
 if (isset($_POST["submit"])) {
-
     if (empty(trim($_POST["company_id"]))) {
         $error["company_id"] = "Company Name is Required";
     }
-
     if (empty(trim($_POST["model_id"]))) {
         $error["model_id"] = "Model Name is Required";
     }
-
-
     if (empty(trim($_POST["name"]))) {
         $error["name"] = "Child Model Name is Required";
     }
