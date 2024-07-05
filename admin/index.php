@@ -13,20 +13,16 @@ if (isset($_POST['submit'])) {
         $row = mysqli_fetch_assoc($sql);
 
         if ($row['id'] != 1) {
-            // $branch_sql = mysqli_query($conn, "select * from employees where id=" . $row['id']);
-            $branch_sql = mysqli_query($conn, "SELECT * FROM employees WHERE id=" . $row['id'] . " AND status=1");
+            $branch_sql = mysqli_query($conn, "select * from employees where id=" . $row['id']);
             $branch_num = mysqli_num_rows($branch_sql);
             $branch_row = mysqli_fetch_assoc($branch_sql);
-            // print_r($branch_row['id']);
-            // exit;
         }
 
         $_SESSION['USER_ID'] = $row['id'];
         if ($row['id'] != 1) {
-            if (!empty($branch_row['branch_id'])) {
-                $_SESSION['id'] =$branch_row['id'];
-                
-                $_SESSION['USER_BRANCH_ID'] = !empty($branch_row['branch_id']);
+            $_SESSION['status'] = $branch_row['status'];
+            if (!empty($_SESSION['status'] == 1)) {
+                $_SESSION['USER_BRANCH_ID'] = $branch_row['branch_id'];
                 $_SESSION['USER_NAME'] = $row['user_name'];
                 $_SESSION['ROLE'] = $row['role'];
                 header("location:dashboard.php");
@@ -37,13 +33,15 @@ if (isset($_POST['submit'])) {
         } else {
             $_SESSION['USER_BRANCH_ID'] = '';
         }
-        $_SESSION['USER_NAME'] = $row['user_name'];
-        $_SESSION['ROLE'] = $row['role'];
-        if ($row['id'] == 1) {
 
+
+        if ($row['id'] == 1) {
+            $_SESSION['USER_BRANCH_ID'] = $branch_row['branch_id'];
+            $_SESSION['status'] = $branch_row['status'];
+            $_SESSION['USER_NAME'] = $row['user_name'];
+            $_SESSION['ROLE'] = $row['role'];
             header("location:dashboard.php");
-        } else {
-            $msg = "Please Contact Admin";
+            exit();
         }
     } else {
         $msg = "Please Enter Valid Details !";
@@ -101,18 +99,16 @@ if (isset($_POST['submit'])) {
                                     </div>
                                 </div>
                                 <div class="form-group form-primary">
-                                    <!-- <input type="text" name="user_name" class="form-control" value="<?php echo isset($_COOKIE['remember_username']) ? $_COOKIE['remember_username'] : ''; ?>"> -->
-                                    <input type="text" name="user_name" class="form-control" value="<?php if (isset($_POST['user_name'])) echo trim($_POST['user_name']); ?>">
-
+                                <input type="text" name="user_name" class="form-control" value="<?php if (isset($_POST['user_name'])) echo trim($_POST['user_name']); ?>">
                                     <span class="form-bar"></span>
                                     <label class="float-label">User Name</label>
                                 </div>
                                 <div class="form-group form-primary">
-                                    <!-- <input type="password" name="password" class="form-control" value="<?php echo isset($_COOKIE['remember_password']) ? $_COOKIE['remember_password'] : ''; ?>"> -->
-                                    <input type="password" name="password" class="form-control" value="<?php if (isset($_POST['password'])) echo trim($_POST['password']); ?>">
+                                <input type="password" name="password" class="form-control" value="<?php if (isset($_POST['password'])) echo trim($_POST['password']); ?>">
                                     <span class="form-bar"></span>
                                     <label class="float-label">Password</label>
                                 </div>
+
                                 <div class="error" style="text-align: center;">
                                     <?php echo $msg ?>
                                 </div>

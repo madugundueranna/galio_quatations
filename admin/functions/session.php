@@ -7,8 +7,8 @@ if (!isset($_SESSION['USER_ID'])) {
 // print_r($_SESSION);
 // exit;
 
-if (isset($_SESSION['id'])) {
-    $sql = "SELECT * FROM employees WHERE id=" . $_SESSION['id'] . " AND status=1";
+if (isset($_SESSION['status'])) {
+    $sql = "SELECT * FROM employees WHERE status=" . $_SESSION['status'];
     $res = mysqli_query($conn, $sql);
     $branch = mysqli_fetch_assoc($res);
 
@@ -18,3 +18,4 @@ if (isset($_SESSION['id'])) {
         die();
     }
 }
+?>
