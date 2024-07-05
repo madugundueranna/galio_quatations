@@ -1,0 +1,4 @@
+config/dbcon.php
+uploads/brands/*
+uploads/companies/*
+uploads/products/*
