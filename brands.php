@@ -5,8 +5,11 @@ include('config/dbcon.php');
 include_once("header.php");
 $status = 1;
 if (isset($_POST['search_button'])) {
-    $searchTerm = mysqli_real_escape_string($conn, $_POST['search_term']);
 
+    $searchTerm = mysqli_real_escape_string($conn, $_POST['search_term']);
+    if (empty($searchTerm)) {
+        $error['search_term'] = "Please Enter Brand Name";
+    }
     // $sql_brand_name = "SELECT * FROM `brands`  WHERE name LIKE '%$searchTerm%'";
     $sql_brand_name = "SELECT * FROM `brands` WHERE status = " . $status . " AND name LIKE '%" . $searchTerm . "%'";
 
@@ -22,35 +25,50 @@ if (isset($_POST['search_button'])) {
 
         <?php
         if ($result_brand_name[0]['id']) {
-          
         ?>
-                <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-                    <div class="row mt-2">
-                        <div class="col-sm-5 p-0 col-10">
-                            <input type="text" class="form-control" placeholder="Search Brand" name="search_term">
-                        </div>
-                        <div class="col-sm-2 p-0 col-2">
-                            <button type="submit" class="btn btn-danger btn-block" name="search_button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </div>
+            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="row mt-2">
+                    <div class="col-sm-5 p-0 col-10">
+                        <input type="text" class="form-control" placeholder="Search Brand" name="search_term" value="<?php if (isset($_POST['search_term'])) echo trim($_POST['search_term']); ?>">
+                        <span style=color:red;><?php if (!empty($error['search_term']))  echo $error['search_term']; ?></span>
                     </div>
-                </form>
+                    <div class="col-sm-2 p-0 col-2">
+                        <button type="submit" class="btn btn-danger btn-block" name="search_button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
 
-                <div class="sec-title">
-                    <div class="row d-flex align-items-center">
-                        <div class="col-md-12 p-0">
-                            <div class="heading_home">
-                                <h2>Search by Brands</h2>
+            <div class="sec-title">
+                <div class="row d-flex align-items-center">
+                    <div class="col-md-12 p-0">
+                        <div class="heading_home">
+                            <h2>Search by Brands</h2>
 
-                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
 
         <?php
-            }
-    
+        } else {
+        ?>
+            <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+                <div class="row mt-2">
+                    <div class="col-sm-5 p-0 col-10">
+                        <input type="text" class="form-control" placeholder="Search Brand" name="search_term">
+                    </div>
+                    <div class="col-sm-2 p-0 col-2">
+                        <button type="submit" class="btn btn-danger btn-block" name="search_button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        <?php
+        }
+
         ?>
         <div class="content-bar">
             <!-- Start row -->
@@ -74,7 +92,7 @@ if (isset($_POST['search_button'])) {
                 <?php
                     }
                 } else {
-                    echo '<p style="color: red;">Brands is Not Available</p>';
+                    echo '<p style="color: red;">Brands are Not Available</p>';
                 }
                 ?>
 
@@ -85,7 +103,5 @@ if (isset($_POST['search_button'])) {
         <!-- End Rightbar -->
     </div>
 </div>
-</div>
-</div>
-</div>
+
 <?php include_once("footer.php") ?>

@@ -56,13 +56,10 @@ if (isset($_POST["submit"])) {
             if (count($error) == 0) {
                 $model_update_id = updateRecord('child_models', $data, $id);
                 if ($model_update_id) {
-                    redirecte("chlide_model.php", "Child Model Name Updated Successfully");
+                    redirecte("chlide_model.php", "Childe Model Name Updated Successfully");
                 }
             }
         } else {
-            //    print_r( $_POST["company_id"]);
-            //    print_r($_POST["model_id"]);
-            //    exit;
             $data['model_id'] = $_POST["model_id"];
             $data['name'] = $_POST["name"];
             $data['created_at'] = date('Y-m-d H:i:s');
@@ -104,11 +101,11 @@ if (isset($_GET['chlide_model_active']) && isset($_GET['status'])) {
     $data['status'] = $_GET['status'];
     $inactive_model_update_id = updateRecord('child_models', $data, $_GET['chlide_model_active']);
     if ($inactive_model_update_id && $_GET['status'] == 0) {
-        redirecte("chlide_model.php", "Chlide Model Inactive Successfully");
+        redirecte("chlide_model.php", "Childe Model Inactive Successfully");
     }
 
     if ($inactive_model_update_id && $_GET['status'] == 1) {
-        redirecte("chlide_model.php", "Chlide Model Active Successfully");
+        redirecte("chlide_model.php", "Childe Model Active Successfully");
     }
 }
 
@@ -125,7 +122,7 @@ include('includes/sidebar.php');
                         <li class="breadcrumb-item">
                             <i class="feather icon-home"></i>
                         </li>
-                        <li class="breadcrumb-item"><a href="#!"> Child Model Names</a></li>
+                        <li class="breadcrumb-item"><a href="#!"> Childe Model Names</a></li>
                     </ul>
                 </div>
             </div>
@@ -190,7 +187,7 @@ include('includes/sidebar.php');
 
 
                                             <div class="col-md-3">
-                                                <label> Child Model Name</label><span style="color: red;">*</span>
+                                                <label> Childe Model Name</label><span style="color: red;">*</span>
                                                 <input type="text" name="name" class="form-control mx-auto" value="<?php if (isset($_POST['name'])) echo trim($_POST['name']); ?>">
                                                 <span style=color:red;><?php if (isset($error["name"])) echo $error["name"]; ?></span>
                                             </div>
@@ -218,7 +215,7 @@ include('includes/sidebar.php');
                 <div class="col-md-12">
                     <div class="card table-card">
                         <div class="card-header bg-info">
-                            <h5>Child Model Names</h5>
+                            <h5>Childe Model Names</h5>
                         </div>
                         <div class="card-block p-b-0">
                             <div class="table-responsive">
@@ -310,7 +307,7 @@ include('includes/sidebar.php');
     function inactiveChlidModel(id, currentStatus) {
         var status = currentStatus ? 0 : 1; // Toggle the status
 
-        var text = status ? 'You want to Activate the Chlide Model' : 'You want to Inactivate the Chlide Model!';
+        var text = status ? 'You want to Activate the Childe Model' : 'You want to Inactivate the Childe Model!';
 
         Swal.fire({
             title: 'Are you sure?',

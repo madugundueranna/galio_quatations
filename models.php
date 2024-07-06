@@ -71,7 +71,7 @@ include_once("header.php");
 								<?php
 									}
 								} else {
-									echo '<p style="color: red;">Models is Not Available</p>';
+									echo '<p style="color: red;">Models are Not Available</p>';
 								}
 								?>
 							</div>
@@ -101,7 +101,5 @@ include_once("header.php");
 		<!-- End Rightbar -->
 	</div>
 </div>
-</div>
-</div>
-</div>
+
 <?php include_once("footer.php") ?>

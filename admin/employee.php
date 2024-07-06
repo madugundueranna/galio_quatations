@@ -11,16 +11,16 @@ $emp_created_by = $_SESSION['USER_ID'];
 $emp_updated_by = $_SESSION['USER_ID'];
 if (isset($_POST["submit"])) {
 	if (empty(trim($_POST["name"]))) {
-		$error["name"] = "Employee name is required";
+		$error["name"] = "Employee Name is Required";
 	} else {
 		if (!preg_match("/^[a-zA-Z ]*$/", $_POST["name"])) {
 			$error["name"] = "only letters and space characters";
 		}
 	}
 	if (empty(trim($_POST["phone"]))) {
-		$error["phone"] = "Phone number is required";
+		$error["phone"] = "Phone Number is Required";
 	} elseif (!preg_match('/^\d{10}$/', $_POST["phone"])) {
-		$error["phone"] = "Phone number must be 10 digits";
+		$error["phone"] = "Phone Number Must be 10 Digits";
 	}
 
 	if ($_POST['id'] != '') {
@@ -35,10 +35,10 @@ if (isset($_POST["submit"])) {
 	}
 
 	if (empty(trim($_POST["password"]))) {
-		$error["password"] = "Password is required";
+		$error["password"] = "Password is Required";
 	}
 	if (empty(trim($_POST["branch_id"]))) {
-		$error["branch_id"] = "Branch is required";
+		$error["branch_id"] = "Branch is Required";
 	}
 
 
@@ -83,7 +83,7 @@ if (isset($_POST["submit"])) {
 						$followup_msg = "Dear " . $row_employee['name'] . ", You have registered successfully. Your login credentials are: User ID: " . $row_employee['phone'] . " and Password: " . $password . "";
 						sendWhatsAppMessage($phone, $followup_msg);
 					}
-					redirecte("employees.php", "Employee added successfully");
+					redirecte("employees.php", "Employee Added Successfully");
 				}
 			}
 		}

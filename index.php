@@ -2,8 +2,12 @@
 include('admin/functions/functions.php');
 include('config/dbcon.php');
 $status = 1;
+$error = array();
 if (isset($_POST['search_button'])) {
     $searchTerm = mysqli_real_escape_string($conn, $_POST['search_term']);
+    if (empty($searchTerm)) {
+        $error['search_term'] = "Please Enter Brand or company";
+    }
     $sql_brand_name = "SELECT * FROM `brands` WHERE status = " . $status . " AND name LIKE '%" . $searchTerm . "%'";
     $result_brand_name = getQueryDataList($sql_brand_name);
     $sql_company = "SELECT * FROM `companies` WHERE status=" . $status . " AND name LIKE '%" . $searchTerm . "%' ";
@@ -31,6 +35,7 @@ if (isset($_POST['search_button'])) {
             <div class="row mt-2">
                 <div class="col-sm-5 p-0 col-10">
                     <input type="text" class="form-control" placeholder="Search Company or Brand" name="search_term">
+                    <span style=color:red;><?php if (!empty($error['search_term']))  echo $error['search_term']; ?></span>
                 </div>
                 <div class="col-sm-2 p-0 col-2">
                     <button type="submit" class="btn btn-danger btn-block" name="search_button">
@@ -68,7 +73,7 @@ if (isset($_POST['search_button'])) {
                 <?php
                     }
                 } else {
-                    echo '<p style="color: red;">companies is Not Available</p>';
+                    echo '<p style="color: red;">Companies are Not Available</p>';
                 }
 
 
@@ -103,7 +108,7 @@ if (isset($_POST['search_button'])) {
             <?php
                 }
             } else {
-                echo '<p style="color: red;">Brands is Not Available</p>';
+                echo '<p style="color: red;">Brands are Not Available</p>';
             }
             ?>
 

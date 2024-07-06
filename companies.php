@@ -3,9 +3,13 @@ include('admin/functions/functions.php');
 include('config/dbcon.php');
 include_once("header.php");
 $status = 1;
+$error = array();
 if (isset($_POST['search_button'])) {
 
   $searchTerm = mysqli_real_escape_string($conn, $_POST['search_term']);
+  if (empty($searchTerm)) {
+    $error['search_term'] = "Please Enter Company Name";
+}
 
   $sql_company = "SELECT * FROM `companies` WHERE name LIKE '%$searchTerm%'";
   $result_company = getQueryDataList($sql_company);
@@ -30,7 +34,8 @@ if (isset($_POST['search_button'])) {
       <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <div class="row mt-2">
           <div class="col-sm-5 p-0 col-10">
-            <input type="text" class="form-control" placeholder="Search Company" name="search_term">
+            <input type="text" class="form-control" placeholder="Search Company" name="search_term" value="<?php if (isset($_POST['search_term'])) echo trim($_POST['search_term']); ?>">
+            <span style=color:red;><?php if (!empty($error['search_term']))  echo $error['search_term']; ?></span>
           </div>
           <div class="col-sm-2 p-0 col-2">
             <button type="submit" class="btn btn-danger btn-block" name="search_button">
@@ -51,6 +56,22 @@ if (isset($_POST['search_button'])) {
           </div>
         </div>
       </div>
+    <?php
+    } else {
+    ?>
+
+      <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <div class="row mt-2">
+          <div class="col-sm-5 p-0 col-10">
+            <input type="text" class="form-control" placeholder="Search Company" name="search_term">
+          </div>
+          <div class="col-sm-2 p-0 col-2">
+            <button type="submit" class="btn btn-danger btn-block" name="search_button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
     <?php
     }
     // }

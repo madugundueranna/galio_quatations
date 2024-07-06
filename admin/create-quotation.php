@@ -9,7 +9,7 @@ $error = array();
 $quotation_created_by = $_SESSION['USER_ID'];
 if (isset($_POST["submit"])) {
 	if (empty(trim($_POST["customer_name"]))) {
-		$error["customer_name"] = "Customer name is required";
+		$error["customer_name"] = "Customer Name is Required";
 	} else {
 		if (!preg_match("/^[a-zA-Z ]*$/", $_POST["customer_name"])) {
 			$error["customer_name"] = "Only Letters and Space are Allowed";
@@ -214,7 +214,7 @@ $result_items = $conn->query($sql_items);
 													<td>Labour Charges</td>
 													<td></td>
 													<td></td>
-													<td colspan="1"><input type="number" id="labour_charges" name="labour_charges"></td>
+													<td colspan="1"><input type="number" id="labour_charges" name="labour_charges" value="<?= isset($_POST['labour_charges']) ? htmlspecialchars($_POST['labour_charges']) : ''; ?>"></td>
 												</tr>
 
 
@@ -222,7 +222,7 @@ $result_items = $conn->query($sql_items);
 													<td>Grand Total</td>
 													<td></td>
 													<td></td>
-													<td colspan="1"><input type="number" id="grand_total" name="grand_total"></td>
+													<td colspan="1"><input type="number" id="grand_total" name="grand_total" value="<?= isset($_POST['grand_total']) ? htmlspecialchars($_POST['grand_total']) : ''; ?>"></td>
 												</tr>
 
 											</table>
