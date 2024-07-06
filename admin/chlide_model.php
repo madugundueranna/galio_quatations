@@ -168,7 +168,7 @@ include('includes/sidebar.php');
                                                 <select name="model_id" id="model_id" class="form-control col-lg-12">
                                                     <option value="" selected>Select Model Name</option>
                                                     <?php
-                                                    if (isset($_POST["company_id"])) {
+                                                    if (isset($_POST["company_id"]) && !isset($error["company_id"])) {
                                                         $sql_model = "select * from models where company_id=" . $_POST['company_id'];
                                                         $result_model = mysqli_query($conn, $sql_model);
                                                         if ($result_model->num_rows > 0) {
