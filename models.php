@@ -37,7 +37,8 @@ include_once("header.php");
 						<div class="card-body">
 							<div class="table-responsive">
 								<?php
-								$sql_model_name = "SELECT * FROM `models` WHERE company_id=" . $_GET['company_id'];
+								$status = 1;
+								$sql_model_name = "SELECT * FROM `models` WHERE company_id=" . $_GET['company_id'] . " and  status=" . $status;
 								$row_model_name = getQueryDataList($sql_model_name);
 								if (!empty($row_model_name)) {
 									foreach ($row_model_name as $value) {
@@ -45,7 +46,7 @@ include_once("header.php");
 										$model_name = $value['name'];
 
 										// Count of child models
-										$sql_count_of_child_models = "SELECT COUNT(*) AS record_count FROM `child_models` WHERE model_id = $model_id";
+										$sql_count_of_child_models = "SELECT COUNT(*) AS record_count FROM `child_models` WHERE model_id = $model_id  and status=$status";
 										$count_of_child_models = getQueryDataList($sql_count_of_child_models);
 										$count_of_child_models = $count_of_child_models[0]['record_count'];
 
@@ -69,6 +70,8 @@ include_once("header.php");
 										</table>
 								<?php
 									}
+								} else {
+									echo '<p style="color: red;">Models is Not Available</p>';
 								}
 								?>
 							</div>

@@ -89,13 +89,26 @@ if (isset($_GET['update_id'])) {
     }
 }
 
-if (isset($_GET["deleteID"])) {
+/*if (isset($_GET["deleteID"])) {
     $sql_child_model = "DELETE FROM `child_models` WHERE id=" . $_GET["deleteID"];
 
     $result_child_model = mysqli_query($conn, $sql_child_model);
 
     if ($result_child_model) {
         redirecte("chlide_model.php", " Chlide Model Name Deleted Successfully");
+    }
+}*/
+
+
+if (isset($_GET['chlide_model_active']) && isset($_GET['status'])) {
+    $data['status'] = $_GET['status'];
+    $inactive_model_update_id = updateRecord('child_models', $data, $_GET['chlide_model_active']);
+    if ($inactive_model_update_id && $_GET['status'] == 0) {
+        redirecte("chlide_model.php", "Chlide Model Inactive Successfully");
+    }
+
+    if ($inactive_model_update_id && $_GET['status'] == 1) {
+        redirecte("chlide_model.php", "Chlide Model Active Successfully");
     }
 }
 
@@ -218,6 +231,7 @@ include('includes/sidebar.php');
                                             <th>Model Name</th>
                                             <th> Chlid Model Name</th>
                                             <th>Created Date</th>
+                                            <th>Status</th>
                                             <th class="not-export-column">Actions</th>
                                         </tr>
                                     </thead>
@@ -226,7 +240,7 @@ include('includes/sidebar.php');
                                         $i = 0;
                                         $sql_child_model_name = "SELECT c.*,m.name as model_name,cm.name 
                                         as child_model_name,cm.created_at as model_name_created_at ,cm.id as child_model_id,
-                                        c.name as company_name,m.name as model_name,b.id,b.name as brand_name
+                                        c.name as company_name,m.name as model_name,b.id,b.name as brand_name,cm.status as child_model_status
                                         FROM companies AS c
                                         JOIN models AS m ON c.id = m.company_id
                                         JOIN brands AS b ON b.id = c.brand_id
@@ -246,11 +260,16 @@ include('includes/sidebar.php');
                                                     <td><?php echo $row['model_name']; ?></td>
                                                     <td><?php echo $row['child_model_name']; ?></td>
                                                     <td><?php echo date('d-m-Y', strtotime($row['model_name_created_at'])); ?></td>
+                                                    <td><?php if ($row['child_model_status'] == 1) echo "Active";
+                                                        else echo "InActive" ?></td>
                                                     <td>
                                                         <a class="btn btn-primary" href="chlide_model.php?update_id=<?php echo $row["child_model_id"] ?>">Edit</a>
                                                         <span style="margin: 0 5px;"></span>
 
-                                                        <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['child_model_id']; ?>)">Delete</a>
+                                                        <!-- <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['child_model_id']; ?>)">Delete</a> -->
+                                                        <a class="text-danger" id="flexSwitchCheckDefault1_<?php echo $row['child_model_id']; ?>" onclick="inactiveChlidModel('<?php echo $row['child_model_id']; ?>', <?php echo $row['child_model_status']; ?>)">
+                                                            <i class="<?php echo $row['child_model_status'] == 1 ? 'fas fa-toggle-on' : 'fas fa-toggle-off'; ?> fa-2x" style="font-size: 1.5em;"></i>
+                                                        </a>
                                                     </td>
 
                                                 </tr>
@@ -270,7 +289,7 @@ include('includes/sidebar.php');
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmDelete(id) {
+    /*function confirmDelete(id) {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You want to delete the record!',
@@ -282,6 +301,28 @@ include('includes/sidebar.php');
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'chlide_model.php?deleteID=' + id;
+            }
+        });
+    }*/
+
+
+
+    function inactiveChlidModel(id, currentStatus) {
+        var status = currentStatus ? 0 : 1; // Toggle the status
+
+        var text = status ? 'You want to Activate the Chlide Model' : 'You want to Inactivate the Chlide Model!';
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'chlide_model.php?chlide_model_active=' + id + '&status=' + status;
             }
         });
     }

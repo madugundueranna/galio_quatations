@@ -135,7 +135,7 @@ if (isset($_GET['update_id'])) {
 }
 
 
-if (isset($_GET["delete_id"])) {
+/*if (isset($_GET["delete_id"])) {
 
     $get_sql_brand = "select * from brands where id=" . $_GET["delete_id"];
     $query_run = mysqli_query($conn, $get_sql_brand);
@@ -149,7 +149,22 @@ if (isset($_GET["delete_id"])) {
         unlink("uploads/brands/" . $value['image']);
         redirecte("brand.php", "Brand Name Deleted Successfully");
     }
+}*/
+
+
+if (isset($_GET['deleteID']) && isset($_GET['status'])) {
+    $data['status'] = $_GET['status'];
+    $inactive_brand_update_id = updateRecord('brands', $data, $_GET['deleteID']);
+    if ($inactive_brand_update_id && $_GET['status']==0) {
+        redirecte("brand.php", "Brand Inactive Successfully");
+    }
+
+    if ($inactive_brand_update_id && $_GET['status']==1) {
+        redirecte("brand.php", "Brand Active Successfully");
+    }
 }
+
+
 
 include('includes/header.php');
 include('includes/sidebar.php');
@@ -205,7 +220,7 @@ include('includes/sidebar.php');
                                                 </div>
                                             </div>
 
-                                          
+
 
                                             <?php if (!empty($_GET['update_id'])) {
                                             ?>
@@ -240,6 +255,7 @@ include('includes/sidebar.php');
                                             <th>Brand Name</th>
                                             <th>image</th>
                                             <th>Created Date</th>
+                                            <th>Status</th>
                                             <th class="not-export-column">Actions</th>
                                         </tr>
                                     </thead>
@@ -258,11 +274,17 @@ include('includes/sidebar.php');
                                                     <td><?php echo $row['name']; ?></td>
                                                     <td><img width="100" src="<?= 'uploads/brands/' . $row['image']; ?>" /></td>
                                                     <td><?php echo date('d-m-Y', strtotime($row['created_at'])); ?></td>
+                                                    <td><?php if ($row['status'] == 1) echo "Active";
+                                                        else echo "InActive" ?></td>
                                                     <td>
                                                         <a class="btn btn-primary" href="brand.php?update_id=<?php echo $row["id"] ?>">Edit</a>
                                                         <span style="margin: 0 5px;"></span>
 
-                                                        <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['id']; ?>)">Delete</a>
+                                                        <!-- <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['id']; ?>)">Delete</a> -->
+
+                                                        <a class="text-danger" id="flexSwitchCheckDefault1_<?php echo $row['id']; ?>" onclick="inactiveBrand('<?php echo $row['id']; ?>', <?php echo $row['status']; ?>)">
+                                                            <i class="<?php echo $row['status'] == 1 ? 'fas fa-toggle-on' : 'fas fa-toggle-off'; ?> fa-2x" style="font-size: 1.5em;"></i>
+                                                        </a>
                                                     </td>
 
                                                 </tr>
@@ -282,7 +304,7 @@ include('includes/sidebar.php');
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmDelete(id) {
+    /*function confirmDelete(id) {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You want to delete the record!',
@@ -296,7 +318,7 @@ include('includes/sidebar.php');
                 window.location.href = 'brand.php?delete_id=' + id;
             }
         });
-    }
+    }*/
 
     $(document).ready(function() {
         var table = $('#brand_table').DataTable({
@@ -322,5 +344,26 @@ include('includes/sidebar.php');
             ]
         });
     });
+
+
+    function inactiveBrand(id, currentStatus) {
+        var status = currentStatus ? 0 : 1; // Toggle the status
+
+        var text = status ? 'You want to Activate the Brand!' : 'You want to Inactivate the Brand!';
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'brand.php?deleteID=' + id + '&status=' + status;
+            }
+        });
+    }
 </script>
 <?php include('includes/footer.php'); ?>

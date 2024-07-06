@@ -156,7 +156,7 @@ if (isset($_GET['update_id'])) {
 
 
 
-if (isset($_GET["deleteID"])) {
+/*if (isset($_GET["deleteID"])) {
 
     $get_data_sql = "select * from companies where id=" . $_GET["deleteID"];
     $query_run = mysqli_query($conn, $get_data_sql);
@@ -169,6 +169,17 @@ if (isset($_GET["deleteID"])) {
         unlink("uploads/companies/" . $value['image']);
         redirecte("company.php", "Compnay Name Deleted Successfully");
         exit(0);
+    }
+}*/
+if (isset($_GET['company_active']) && isset($_GET['status'])) {
+    $data['status'] = $_GET['status'];
+    $inactive_company_update_id = updateRecord('companies', $data, $_GET['company_active']);
+    if ($inactive_company_update_id && $_GET['status']==0) {
+        redirecte("company.php", "Company Inactive Successfully");
+    }
+
+    if ($inactive_company_update_id && $_GET['status']==1) {
+        redirecte("company.php", "Company Active Successfully");
     }
 }
 
@@ -283,6 +294,7 @@ include('includes/sidebar.php');
                                             <th>Compnay Name</th>
                                             <th>Image</th>
                                             <th>Created Date</th>
+                                            <th>Status</th>
                                             <th class="not-export-column">Actions</th>
                                         </tr>
                                     </thead>
@@ -315,12 +327,18 @@ include('includes/sidebar.php');
                                                     <td><?php echo $row['name']; ?></td>
                                                     <td><img width="100" src="<?= 'uploads/companies/' . $row['image']; ?>" /></td>
                                                     <td><?php echo date('d-m-Y', strtotime($row['created_at'])); ?></td>
-
+                                                    <td><?php if ($row['status'] == 1) echo "Active";
+                                                        else echo "InActive" ?></td>
+                                            
                                                     <td>
                                                         <a class="btn btn-primary" href="company.php?update_id=<?php echo $row["id"] ?>">Edit</a>
                                                         <span style="margin: 0 5px;"></span>
 
-                                                        <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['id']; ?>)">Delete</a>
+                                                        <!-- <a class="btn btn-danger" href="javascript:void(0);" onclick="confirmDelete(<?php echo $row['id']; ?>)">Delete</a> -->
+
+                                                        <a class="text-danger" id="flexSwitchCheckDefault1_<?php echo $row['id']; ?>" onclick="inactiveCompany('<?php echo $row['id']; ?>', <?php echo $row['status']; ?>)">
+                                                            <i class="<?php echo $row['status'] == 1 ? 'fas fa-toggle-on' : 'fas fa-toggle-off'; ?> fa-2x" style="font-size: 1.5em;"></i>
+                                                        </a>
                                                     </td>
 
                                                 </tr>
@@ -340,7 +358,7 @@ include('includes/sidebar.php');
 </div>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
-    function confirmDelete(id) {
+    /*function confirmDelete(id) {
         Swal.fire({
             title: 'Are you sure?',
             text: 'You want to delete the record!',
@@ -352,6 +370,27 @@ include('includes/sidebar.php');
         }).then((result) => {
             if (result.isConfirmed) {
                 window.location.href = 'company.php?deleteID=' + id;
+            }
+        });
+    }*/
+
+
+    function inactiveCompany(id, currentStatus) {
+        var status = currentStatus ? 0 : 1; // Toggle the status
+
+        var text = status ? 'You want to Activate the Company' : 'You want to Inactivate the Company!';
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: text,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'company.php?company_active=' + id + '&status=' + status;
             }
         });
     }

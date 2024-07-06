@@ -26,21 +26,31 @@ include_once("header.php");
 						?>
 					</select>
 				<?php
+				} else {
+					echo '<p style="color: red;">Products is Not Available</p>';
 				}
 
 				?>
 			</div>
 		</div>
-		<div class="sec-title">
-			<div class="row d-flex align-items-center">
-				<div class="col-md-12 p-0">
-					<div class="heading_home">
-					<h2>Search by Company <span class="float-right"><a href="products.php?chlide_model_id=<?php echo $_GET['chlide_model_id']; ?>">View All</a></span></h2>
+		<?php
+		if (mysqli_num_rows($result_product_name) > 0) {
+		?>
+			<div class="sec-title">
+				<div class="row d-flex align-items-center">
+					<div class="col-md-12 p-0">
+						<div class="heading_home">
+							<h2>Search by Company <span class="float-right"><a href="products.php?chlide_model_id=<?php echo $_GET['chlide_model_id']; ?>">View All</a></span></h2>
 
+						</div>
 					</div>
 				</div>
 			</div>
-		</div>
+
+		<?php
+		}
+		?>
+
 
 		<div class="content-bar">
 			<!-- Start row -->
@@ -101,22 +111,20 @@ include_once("header.php");
 
 <script>
 	function updateRelatedCards() {
-    var selectedProductId = document.getElementById('product_name').value;
-    var chlideModelId = '<?php echo $_GET['chlide_model_id']; ?>'; // Get the chlide_model_id
+		var selectedProductId = document.getElementById('product_name').value;
+		var chlideModelId = '<?php echo $_GET['chlide_model_id']; ?>'; // Get the chlide_model_id
 
-    // Make an AJAX request to fetch related cards based on the selected accessory name and chlide_model_id
-    var xmlhttp = new XMLHttpRequest();
-    xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            // Update the content of the related cards container
-            document.getElementById('relatedCardsContainer').innerHTML = this.responseText;
-        }
-    };
-    xmlhttp.open("GET", "get_related_cards.php?chlide_model_id=" + chlideModelId + "&product_id=" + selectedProductId, true);
-    xmlhttp.send();
-}
-
-
+		// Make an AJAX request to fetch related cards based on the selected accessory name and chlide_model_id
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				// Update the content of the related cards container
+				document.getElementById('relatedCardsContainer').innerHTML = this.responseText;
+			}
+		};
+		xmlhttp.open("GET", "get_related_cards.php?chlide_model_id=" + chlideModelId + "&product_id=" + selectedProductId, true);
+		xmlhttp.send();
+	}
 </script>
 
 <?php include_once("footer.php") ?>

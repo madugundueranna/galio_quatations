@@ -2,54 +2,61 @@
 include('admin/functions/functions.php');
 include('config/dbcon.php');
 include_once("header.php");
-
+$status = 1;
 if (isset($_POST['search_button'])) {
 
   $searchTerm = mysqli_real_escape_string($conn, $_POST['search_term']);
-    
+
   $sql_company = "SELECT * FROM `companies` WHERE name LIKE '%$searchTerm%'";
   $result_company = getQueryDataList($sql_company);
+} else if (isset($_GET['brand_id'])) {
+  $sql_company = "SELECT * FROM `companies` WHERE status = " . $status . " AND name LIKE '%" . $searchTerm . "%' AND brand_id = " . $_GET['brand_id'];
+  $result_company = getQueryDataList($sql_company);
+} else {
+  $sql_company = "SELECT * FROM `companies` WHERE status=" . $status . " AND name LIKE '%" . $searchTerm . "%' ";
+  $result_company = getQueryDataList($sql_company);
+}
 
-}
-else if(isset($_GET['brand_id']))
-{
-  $sql_company = "SELECT * FROM `companies` where brand_id=".$_GET['brand_id'];
-  $result_company = getQueryDataList($sql_company);
-}
- else {
-  $sql_company = "SELECT * FROM `companies`";
-  $result_company = getQueryDataList($sql_company);
-}
 
 
 ?>
 <div class="content_wrapper bg_homebefore pt-0">
   <div class="container-fluid">
 
-
-    <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
-      <div class="row mt-2">
-        <div class="col-sm-5 p-0 col-10">
-          <input type="text" class="form-control" placeholder="Search Company" name="search_term">
+    <?php
+    // foreach ($result_company as $row_brand) {
+    if (!empty($result_company[0]['brand_id'])) {
+    ?>
+      <form method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+        <div class="row mt-2">
+          <div class="col-sm-5 p-0 col-10">
+            <input type="text" class="form-control" placeholder="Search Company" name="search_term">
+          </div>
+          <div class="col-sm-2 p-0 col-2">
+            <button type="submit" class="btn btn-danger btn-block" name="search_button">
+              <i class="fa fa-search"></i>
+            </button>
+          </div>
         </div>
-        <div class="col-sm-2 p-0 col-2">
-          <button type="submit" class="btn btn-danger btn-block" name="search_button">
-            <i class="fa fa-search"></i>
-          </button>
-        </div>
-      </div>
-    </form>
+      </form>
 
-    <div class="sec-title">
-      <div class="row d-flex align-items-center">
-        <div class="col-md-12 p-0">
-          <div class="heading_home">
-            <h2>Search by Company</h2>
 
+      <div class="sec-title">
+        <div class="row d-flex align-items-center">
+          <div class="col-md-12 p-0">
+            <div class="heading_home">
+              <h2>Search by Company</h2>
+
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    <?php
+    }
+    // }
+    ?>
+
+
 
     <div class="content-bar">
       <!-- Start row -->
@@ -72,6 +79,8 @@ else if(isset($_GET['brand_id']))
             </div>
         <?php
           }
+        } else {
+          echo '<p style="color: red;">companies is Not Available</p>';
         }
         ?>
 

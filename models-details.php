@@ -12,16 +12,22 @@ include_once("header.php"); ?>
 					<div class="heading_home">
 
 						<?php
+						$status = 1;
 						$sql_chlide_model_name = "SELECT * FROM `child_models` where model_id=" . $_GET['model_id'];
 						$row_chlide_model_name = getQueryDataList($sql_chlide_model_name);
+						$sql_model_name = "SELECT * FROM `models` WHERE company_id=" . $_GET['company_id'] . " and  status=" . $status;
+						$row_model_name = getQueryDataList($sql_model_name);
+
 						if ($row_chlide_model_name[0]['id']) {
-							
+
 							if (isset($_GET['company_id'])) {
 								$sql_company_name = "SELECT * FROM `companies` WHERE id=" . $_GET['company_id'];
 								$row_company_name  = getQueryData($sql_company_name);
-								if ($row_company_name) {
+
+								if ($row_company_name) {	
 						?>
-									<h2><?php echo $row_company_name['name']; ?> - Models - Models</h2>
+									<!-- <h2><?php echo $row_company_name['name']; ?> - Models - Models</h2> -->
+									<h2><?php echo $row_company_name['name']; ?> - <?php echo $row_model_name[0]['name']; ?> - Models</h2>
 						<?php
 								}
 							}
@@ -41,7 +47,9 @@ include_once("header.php"); ?>
 						<div class="card-body">
 							<div class="table-responsive ">
 								<?php
-								$sql_chlide_model_name = "SELECT * FROM `child_models` where model_id=" . $_GET['model_id'];
+								// and status=$status";
+								$status = 1;
+								$sql_chlide_model_name = "SELECT * FROM `child_models` where model_id=" . $_GET['model_id'] . " and status=$status";
 
 								$row_chlide_model_name = getQueryDataList($sql_chlide_model_name);
 
@@ -55,7 +63,6 @@ include_once("header.php"); ?>
 													<a href="products.php?chlide_model_id=<?php echo $value['id']; ?>">
 														<?php
 														echo $value['name'];
-
 														$sql_count_of_product_names = "SELECT COUNT(*) AS record_count
 														FROM `products`
 														WHERE chlide_model_id =" . $value['id'];
@@ -68,7 +75,6 @@ include_once("header.php"); ?>
 										<?php
 									}
 								} else if (!empty($_GET['model_id'])) {
-
 										?>
 										<div class="content_wrapper bg_homebefore pt-0">
 											<div class="container-fluid">
@@ -89,12 +95,15 @@ include_once("header.php"); ?>
 																?>
 															</select>
 														<?php
+														} else {
+															echo '<p style="color: red;">Empty Chlide Models</p>';
 														}
+
 
 														?>
 													</div>
 												</div>
-												<div class="sec-title">
+												<!-- <div class="sec-title">
 													<div class="row d-flex align-items-center">
 														<div class="col-md-12 p-0">
 															<div class="heading_home">
@@ -103,8 +112,9 @@ include_once("header.php"); ?>
 															</div>
 														</div>
 													</div>
-												</div>
+												</div> -->
 												<div class="content-bar">
+
 													<!-- Start row -->
 													<div class="row" id="relatedCardsContainer">
 														<!-- Start col -->
