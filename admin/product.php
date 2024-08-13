@@ -53,7 +53,7 @@ if (isset($_POST["submit"])) {
             $error["unit"] = "Packing Unit is allowed only numbers";
         }
     }
-    
+
     if (empty(trim($_POST["code"]))) {
         $error["code"] = "Product Code is required";
     }
@@ -329,7 +329,7 @@ include('includes/sidebar.php');
                                         <select name="model_id" id="model_id" class="form-control col-lg-9">
                                             <option value="" selected>Select Model Name</option>
                                             <?php
-                                            if (isset($_POST["company_id"])) {
+                                            if (isset($_POST["company_id"]) && !isset($error["company_id"])) {
                                                 $sql_model = "select * from models where company_id=" . $_POST['company_id'];
                                                 $result_model = mysqli_query($conn, $sql_model);
                                                 if ($result_model->num_rows > 0) {
@@ -353,7 +353,7 @@ include('includes/sidebar.php');
                                         <select name="chlide_model_id" id="chlide_model_id" class="form-control col-lg-9">
                                             <option value="" selected>Select Child Model Name</option>
                                             <?php
-                                            if (isset($_POST["model_id"])) {
+                                            if (isset($_POST["model_id"]) && !isset($error["model_id"])) {
                                                 $sql_chlide_model = "select * from child_models where model_id=" . $_POST['model_id'];
                                                 $result_chlide_model = mysqli_query($conn, $sql_chlide_model);
                                                 if ($result_chlide_model->num_rows > 0) {

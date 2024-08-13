@@ -15,7 +15,7 @@ if (SITE_ON_LIVE) {
 
     define('DB_SERVER', "localhost");
 
-    define('DB_DATABASE', "abhee");
+    define('DB_DATABASE', "u130520044_gailo_quoation");
 
     define('DB_USER', "root");
 
